@@ -6,14 +6,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
   </head>
-  <body class="h-screen p-6 bg-base-200">
+  <body class="h-screen p-6 bg-base-300">
     <div class="h-full">
       <div class="flex gap-x-4 flex-col h-full w-full lg:flex-row">
         <div class="grid flex-1 place-items-center">MAZE</div>
         <!-- <div class="divider lg:divider-horizontal"></div> -->
-        <div class="grid w-64 bg-base-100 rounded-box place-items-center">
-          Options
+        <!-- OPTIONS              -->
+        <!-- --------------------------------------------- -->
+        <!-- --------------------------------------------- -->
+        <!-- --------------------------------------------- -->
+        <div class="flex flex-col gap-2 w-64 bg-base-100 rounded-box p-4">
+          <div>
+            <label class="form-control w-full max-w-xs">
+              <div class="label">
+                <span class="label-text">Width</span>
+              </div>
+              <input
+                type="number"
+                placeholder="Type here"
+                class="input input-accent w-full max-w-xs"
+              />
+              <div class="label"></div>
+            </label>
+          </div>
+
+          <div>
+            <label class="form-control w-full max-w-xs">
+              <div class="label">
+                <span class="label-text">Height</span>
+              </div>
+              <input
+                type="number"
+                placeholder="Type here"
+                class="input input-accent w-full max-w-xs"
+              />
+              <div class="label"></div>
+            </label>
+          </div>
+
+          <div class="collapse collapse-arrow bg-base-100">
+            <input type="radio" name="my-accordion-2" checked="checked" />
+            <div class="collapse-title text-xl font-medium">Blocks</div>
+            <div class="collapse-content">
+              <div>Target</div>
+              <div>Start</div>
+              <div>Wall</div>
+            </div>
+          </div>
+          <div class="collapse collapse-arrow bg-base-100">
+            <input type="radio" name="my-accordion-2" />
+            <div class="collapse-title text-xl font-medium">Options</div>
+            <div class="collapse-content">
+              <div>Manhatne</div>
+              <div>Ecludian</div>
+              <div>Animation toggle</div>
+              <div>Animation speed</div>
+            </div>
+          </div>
+
+          <div class="mt-auto">
+            <button class="btn btn-primary text-lg w-full">Start</button>
+          </div>
         </div>
+        <!-- OPTIONS  END OF     -->
+        <!-- --------------------------------------------- -->
+        <!-- --------------------------------------------- -->
+        <!-- --------------------------------------------- -->
       </div>
     </div>
     <script src="./main.js" type="module"></script>
