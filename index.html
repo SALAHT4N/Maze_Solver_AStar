@@ -26,9 +26,104 @@
           </div>
         </div>
         <!-- <div class="divider lg:divider-horizontal"></div> -->
-        <div class="grid w-64 bg-base-100 rounded-box place-items-center">
-          Options
+        <!-- OPTIONS              -->
+        <!-- --------------------------------------------- -->
+        <!-- --------------------------------------------- -->
+        <!-- --------------------------------------------- -->
+        <div class="flex flex-col gap-2 w-64 bg-base-100 rounded-box p-4">
+          <div>
+            <label class="form-control w-full max-w-xs">
+              <div class="label">
+                <span class="label-text">Width</span>
+              </div>
+              <input
+                type="number"
+                placeholder="Type here"
+                class="input input-accent w-full max-w-xs"
+              />
+              <div class="label"></div>
+            </label>
+          </div>
+
+          <div>
+            <label class="form-control w-full max-w-xs">
+              <div class="label">
+                <span class="label-text">Height</span>
+              </div>
+              <input
+                type="number"
+                placeholder="Type here"
+                class="input input-accent w-full max-w-xs"
+              />
+              <div class="label"></div>
+            </label>
+          </div>
+
+          <div class="collapse collapse-arrow bg-base-100">
+            <input type="radio" name="my-accordion-2" checked="checked" />
+            <div class="collapse-title font-medium">Blocks</div>
+            <div class="collapse-content">
+              <div>Target</div>
+              <div>Start</div>
+              <div>Wall</div>
+            </div>
+          </div>
+          <div class="collapse collapse-arrow bg-base-100">
+            <input type="radio" name="my-accordion-2" />
+            <div class="collapse-title font-medium">Options</div>
+            <div class="collapse-content">
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">Manhattan</span>
+                  <input
+                    type="radio"
+                    name="radio-10"
+                    class="radio radio-sm checked:bg-red-500"
+                    checked
+                  />
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text font-bold">Ecludian</span>
+                  <input
+                    type="radio"
+                    name="radio-10"
+                    class="radio radio-sm checked:bg-blue-500"
+                    checked
+                  />
+                </label>
+              </div>
+              <div class="divider"></div>
+              <label for="speed"> Speed:</label>
+
+              <input
+                name="speed"
+                type="range"
+                min="0"
+                max="100"
+                value="25"
+                class="range range-xs"
+                step="25"
+              />
+              <div class="w-full flex justify-between text-xs px-2">
+                <span>|</span>
+                <span>|</span>
+                <span>|</span>
+                <span>|</span>
+                <span>|</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-auto">
+            <button class="btn btn-primary text-lg w-full">Start</button>
+          </div>
         </div>
+        <!-- OPTIONS  END OF     -->
+        <!-- --------------------------------------------- -->
+        <!-- --------------------------------------------- -->
+        <!-- --------------------------------------------- -->
       </div>
     </div>
     <script src="./main.js" type="module"></script>
