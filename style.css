@@ -12,3 +12,6 @@ start cell or path cell => bg-base-600 + shadow-green-600
 test cell => bg-blue-600/50
 goal cell => bg-red-700 shadow-red-600/50
 */
+input[type="radio"]:checked + span.label-text {
+  font-weight: 700;
+}
