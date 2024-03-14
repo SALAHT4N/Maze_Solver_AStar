@@ -1,17 +1,22 @@
-import CellView from "./CellView.js";
+import { CellView } from "./CellView.js";
+import * as colors from "../config.js";
 
 export class MazeView {
   _element = document.querySelector("#maze-container");
 
   createMaze(width, height) {
     this._clear();
+    this._element.className = "";
+    this._element.classList.add("grid");
+    this._element.classList.add("gap-3");
     this._element.classList.add(`grid-cols-${width}`);
 
     const countOfCells = width * height;
-
+    console.log(countOfCells);
     for (let i = 0; i < countOfCells; i++) {
-      this.addCell(new CellView());
+      this._addCell(new CellView(0, 0, colors.stateColors, colors.stateGlows));
     }
+    console.log("maze created");
   }
 
   addHandlerChangeState(handler) {
@@ -28,7 +33,7 @@ export class MazeView {
     this._element.innerHTML = "";
   }
 
-  addCell(cell) {
-    this._element.insertAdjacentHTML("beforeend", cell._generateMarkup());
+  _addCell(cell) {
+    this._element.insertAdjacentHTML("beforeend", cell.generateMarkup());
   }
 }
