@@ -6,14 +6,39 @@ const heuristicFunctionsRadioButtons = [
   document.querySelector("#ecludian-radio-input"),
 ];
 const speedRangeInput = document.querySelector("#speed-range-input");
+const startBtn = document.querySelector("#start-button");
 
-const getAllInputData = () => {
+export const getAllInputData = () => {
   return {
-    boardWidth: getWidthInputValue(),
-    boardHeight: getHeightInputValue(),
+    width: getWidthInputValue(),
+    height: getHeightInputValue(),
     heuristicFunction: getHeuristicInputValue(),
     speed: getSpeedRangeInputValue(),
   };
+};
+
+export const addHandlerStartButton = function (handler) {
+  startBtn.addEventListener("click", () => {
+    handler();
+  });
+};
+
+export const addHandlerReadDimensions = function (handler) {
+  widthInput.addEventListener("focusout", () => {
+    const dimensions = {
+      width: getWidthInputValue(),
+    };
+
+    handler(dimensions);
+  });
+
+  heightInput.addEventListener("focusout", () => {
+    const dimensions = {
+      height: getHeightInputValue(),
+    };
+
+    handler(dimensions);
+  });
 };
 
 const getWidthInputValue = () => {
@@ -48,8 +73,8 @@ const getHeuristicInputValue = () => {
     .map((h) => h.id)[0]
     .split("-")[0];
 };
+
 const getSpeedRangeInputValue = () => {
   const speed = +speedRangeInput.value / 25;
   return speed;
 };
-export default getAllInputData;

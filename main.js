@@ -1,9 +1,21 @@
 import "./style.css";
-import getAllInputData from "./views/menuView.js";
-import javascriptLogo from "./javascript.svg";
-import viteLogo from "/vite.svg";
-import { setupCounter } from "./counter.js";
+import * as menu from "./views/MenuView.js";
+import * as model from "./model.js";
+import { MazeView } from "./views/MazeView.js";
 
-document.querySelector("#start-button").addEventListener("click", () => {
-  console.log(getAllInputData());
-});
+const startAlgorithm = function () {
+  model.solve(() => maze.update());
+};
+
+const registerDimensions = function (dimensions) {
+  model.setDimensions(dimensions);
+  const maze = new MazeView();
+  maze.createMaze(model.state.width, model.state.height);
+};
+
+const init = function () {
+  menu.addHandlerStartButton(startAlgorithm);
+  menu.addHandlerReadDimensions(registerDimensions);
+};
+
+init();
