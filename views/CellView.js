@@ -26,9 +26,9 @@ export class CellView {
   }
 
   setState(stateValue) {
-    if (!(stateValue in ["start", "block", "empty", "goal", "test"])) {
-      throw new Error();
-    }
+    // if (!(stateValue in ["start", "block", "empty", "goal", "test"])) {
+    //   throw new Error();
+    // }
 
     this._state = stateValue;
   }
