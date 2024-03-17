@@ -9,4 +9,7 @@ export const stateColors = {
 export const stateGlows = {
   start: "shadow-green-600",
   goal: "shadow-red-600/50",
+  block: "",
+  empty: "",
+  test: "",
 };

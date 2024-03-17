@@ -1,16 +1,16 @@
 import "./style.css";
-import * as menu from "../views/MenuView.js";
-import * as model from "../models/model.js";
-import { MazeView } from "../views/MazeView.js";
-import appConstants from "../appConstants.js";
-let maze;
+import * as menu from "./views/MenuView.js";
+import * as model from "./models/model.js";
+import { MazeView } from "./views/MazeView.js";
+import appConstants from "./appConstants.js";
+import { state } from "./models/state.js";
 
 const startAlgorithm = function () {
   const data = menu.getAllInputData();
-  model.state.width = data.width;
-  model.state.height = data.height;
-  model.state.heuristicFunction = data.heuristicFunction;
-  model.state.speed = data.speed;
+  state.width = data.width;
+  state.height = data.height;
+  state.heuristicFunction = data.heuristicFunction;
+  state.speed = data.speed;
 
   //check if there's no maze
 
@@ -25,19 +25,19 @@ const startAlgorithm = function () {
   );
   console.log("State matrix (controller): ");
   console.log(stateMatrix);
-  model.state.maze = stateMatrix;
-  model.state.endNodes = [
+  state.maze = stateMatrix;
+  state.endNodes = [
     {
       x: 3,
       y: 3,
     },
   ];
-  model.state.startNode = {
+  state.startNode = {
     x: 0,
     y: 0,
     cost: 0,
   };
-  model.state.heuristicFunction = "manhattan";
+  state.heuristicFunction = "manhattan";
   model.solve(() => {
     console.log(model.state.maze);
   });
@@ -45,13 +45,25 @@ const startAlgorithm = function () {
 
 const registerDimensions = function (dimensions) {
   model.setDimensions(dimensions);
-  maze = new MazeView();
-  maze.createMaze(model.state.width, model.state.height);
+
+  maze.createMaze(state.width, state.height);
+};
+
+const updateMaze = function (x, y) {
+  // know the currently selected block type
+  const currentBlockType = state.selectedBlockType;
+
+  // update maze state
+  state.maze[y][x] = appConstants.blockTypes[currentBlockType];
+
+  // add the corresponding color
+  maze.updateCellState(`${x}_${y}`, currentBlockType);
 };
 
 const init = function () {
+  maze.addHandlerChangeState(updateMaze);
   menu.addHandlerStartButton(startAlgorithm);
   menu.addHandlerReadDimensions(registerDimensions);
 };
-
+let maze = new MazeView();
 init();

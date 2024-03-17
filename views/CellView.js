@@ -17,7 +17,9 @@ export class CellView {
 
   generateMarkup() {
     return `
-      <div class="card-body transition-all hover:-translate-y-1 duration-150 
+      <div id="${this.x}_${
+      this.y
+    }"class="card-body transition-all hover:-translate-y-1 duration-150 
       ${this._stateColors[this._state]} ${
       this._stateGlows[this._state] ?? ""
     } shadow-md rounded-md"></div> `;

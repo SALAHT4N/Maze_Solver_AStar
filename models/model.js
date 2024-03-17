@@ -6,7 +6,7 @@ import {
   IGetCompareValue,
 } from "@datastructures-js/priority-queue";
 import appConstants from "../appConstants.js";
-import state from "./state.js";
+import { state } from "./state.js";
 import { Node } from "./Node.js";
 
 /*
@@ -20,6 +20,7 @@ import { Node } from "./Node.js";
 export const solve = function (callback) {
   const openList = new MinPriorityQueue((n) => n.fValue);
   const closedList = [];
+
   openList.enqueue(
     new Node(state.startNode.x, state.startNode.y, 0, null, state.endNodes)
   );
