@@ -1,8 +1,8 @@
 import "./style.css";
-import * as menu from "./views/MenuView.js";
-import * as model from "./model.js";
-import { MazeView } from "./views/MazeView.js";
-import appConstants from "./appConstants.js";
+import * as menu from "../views/MenuView.js";
+import * as model from "../models/model.js";
+import { MazeView } from "../views/MazeView.js";
+import appConstants from "../appConstants.js";
 let maze;
 
 const startAlgorithm = function () {

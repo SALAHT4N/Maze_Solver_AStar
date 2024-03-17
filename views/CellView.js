@@ -3,7 +3,6 @@ export class CellView {
   x;
   y;
 
-  _parentElement = document.querySelector("#maze-container");
   _stateGlows;
   _stateColors;
 
@@ -17,7 +16,6 @@ export class CellView {
   }
 
   generateMarkup() {
-    console.log("markup generated");
     return `
       <div class="card-body transition-all hover:-translate-y-1 duration-150 
       ${this._stateColors[this._state]} ${

@@ -5,7 +5,9 @@ import {
   ICompare,
   IGetCompareValue,
 } from "@datastructures-js/priority-queue";
-import appConstants from "./appConstants";
+import appConstants from "../appConstants.js";
+import state from "./state.js";
+import { Node } from "./Node.js";
 
 /*
  *0 -> Empty
@@ -14,54 +16,13 @@ import appConstants from "./appConstants";
  *3 -> test
  *4 -> Goal
  */
-export const state = {
-  width: 0,
-  height: 0,
-  heuristicFunction: "",
-  speed: 1,
-  maze: [],
-  startNode: {
-    x: 0,
-    y: 0,
-    cost: 0,
-  },
-  endNodes: [
-    {
-      x: 0,
-      y: 0,
-    },
-  ],
-};
-
-class Node {
-  id;
-  x = 0;
-  y = 0;
-  heuristics = [];
-  fValue;
-  cost = 0;
-  parent;
-  constructor(x, y, cost, parent) {
-    this.x = x;
-    this.y = y;
-    this.id = `${this.x}_${this.y}`;
-    this.heuristics = state.endNodes.map((endNode) =>
-      getHeuristic({ x: this.x, y: this.y }, endNode)
-    );
-    this.parent = parent;
-    this.fValue =
-      this.heuristics.reduce((acc, curr) => Math.min(acc, curr)) + this.cost;
-    this.cost = cost;
-  }
-  isGoal() {
-    return this.heuristics.some((v) => v == 0);
-  }
-}
 
 export const solve = function (callback) {
   const openList = new MinPriorityQueue((n) => n.fValue);
   const closedList = [];
-  openList.enqueue(new Node(state.startNode.x, state.startNode.y, 0, null));
+  openList.enqueue(
+    new Node(state.startNode.x, state.startNode.y, 0, null, state.endNodes)
+  );
   const expandChild = (childX, childY, parent) => {
     const rightChild = new Node(childX, childY, parent.cost + 1, parent);
 
