@@ -18,6 +18,16 @@ import { Node } from "./Node.js";
  */
 
 export const solve = function (callback) {
+  if (!state.startNode) {
+    throw new Error("Specify start node");
+  }
+  if (state.endNodes.length > 2) {
+    throw new Error("Maximum number of goals is 2");
+  }
+  if (state.endNodes.length == 0) {
+    throw new Error("Please select a goal to start solving");
+  }
+
   const openList = new MinPriorityQueue((n) => n.fValue);
   const closedList = [];
 
