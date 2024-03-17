@@ -32,4 +32,6 @@ export class CellView {
 
     this.state = stateValue;
   }
+
+  renderState() {}
 }

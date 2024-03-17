@@ -29,6 +29,8 @@ export class MazeView {
     });
   }
 
+  update() {}
+
   _clear() {
     this._element.innerHTML = "";
   }
