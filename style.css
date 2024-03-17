@@ -15,3 +15,7 @@ goal cell => bg-red-700 shadow-red-600/50
 input[type="radio"]:checked + span.label-text {
   font-weight: 700;
 }
+
+div[selected] {
+  transform: translateY(-10%);
+}

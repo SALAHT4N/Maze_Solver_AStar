@@ -65,9 +65,26 @@
             <input type="radio" name="my-accordion-2" checked="checked" />
             <div class="collapse-title font-medium">Blocks</div>
             <div class="collapse-content">
-              <div>Target</div>
-              <div>Start</div>
-              <div>Wall</div>
+              <div class="flex flex-row gap-2">
+                <div class="lg:tooltip" data-tip="Start">
+                  <div
+                    id="start_block"
+                    class="blocks card-body h-full transition-all w-16 hover:-translate-y-1 duration-150 bg-green-600 shadow-md rounded-md"
+                  ></div>
+                </div>
+                <div class="lg:tooltip" data-tip="Wall">
+                  <div
+                    id="wall_block"
+                    class="blocks card-body h-full transition-all w-16 hover:-translate-y-1 duration-150 bg-base-light shadow-md rounded-md"
+                  ></div>
+                </div>
+                <div class="lg:tooltip" data-tip="Goal">
+                  <div
+                    id="goal_block"
+                    class="blocks card-body h-full transition-all w-16 hover:-translate-y-1 duration-150 bg-red-700 shadow-md rounded-md"
+                  ></div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="collapse collapse-arrow bg-base-100">

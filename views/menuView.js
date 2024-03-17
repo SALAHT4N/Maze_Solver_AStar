@@ -7,6 +7,7 @@ const heuristicFunctionsRadioButtons = [
 ];
 const speedRangeInput = document.querySelector("#speed-range-input");
 const startBtn = document.querySelector("#start-button");
+const blocksOpt = document.querySelectorAll(".blocks");
 
 export const getAllInputData = () => {
   return {
@@ -38,6 +39,16 @@ export const addHandlerReadDimensions = function (handler) {
     };
 
     handler(dimensions);
+  });
+};
+
+export const addOnClickHandlerBlocks = (handler) => {
+  blocksOpt.forEach((ele) => {
+    ele.addEventListener("click", () => {
+      blocksOpt.forEach((b) => b.removeAttribute("selected"));
+      ele.setAttribute("selected", "");
+      handler(ele.id.split("_")[0]);
+    });
   });
 };
 

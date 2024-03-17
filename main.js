@@ -49,7 +49,7 @@ const registerDimensions = function (dimensions) {
   maze.createMaze(state.width, state.height);
 };
 
-const updateMaze = function (x, y) {
+const updateMaze = function ({ x, y }) {
   // know the currently selected block type
   const currentBlockType = state.selectedBlockType;
 
@@ -60,10 +60,15 @@ const updateMaze = function (x, y) {
   maze.updateCellState(`${x}_${y}`, currentBlockType);
 };
 
+const blockClicked = function (blockType) {
+  state.selectedBlockType = blockType;
+};
+
 const init = function () {
   maze.addHandlerChangeState(updateMaze);
   menu.addHandlerStartButton(startAlgorithm);
   menu.addHandlerReadDimensions(registerDimensions);
+  menu.addOnClickHandlerBlocks(blockClicked);
 };
 let maze = new MazeView();
 init();
