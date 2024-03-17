@@ -8,7 +8,7 @@ export class CellView {
   _stateColors;
 
   constructor(x, y, stateColors, stateGlows) {
-    this.state = "empty";
+    this._state = "empty";
     this.x = x;
     this.y = y;
 
@@ -20,17 +20,17 @@ export class CellView {
     console.log("markup generated");
     return `
       <div class="card-body transition-all hover:-translate-y-1 duration-150 
-      ${this._stateColors[this.state]} ${
-      this._stateGlows[this.state] ?? ""
+      ${this._stateColors[this._state]} ${
+      this._stateGlows[this._state] ?? ""
     } shadow-md rounded-md"></div> `;
   }
 
   setState(stateValue) {
-    if (!(stateValue in ["start", "block", "empty", "goal", "test"])) {
-      throw new Error();
-    }
+    // if (!(stateValue in ["start", "block", "empty", "goal", "test"])) {
+    //   throw new Error();
+    // }
 
-    this.state = stateValue;
+    this._state = stateValue;
   }
 
   renderState() {}
