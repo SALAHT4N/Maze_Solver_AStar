@@ -18,7 +18,10 @@ export class Node {
     );
     this.parent = parent;
     this.fValue =
-      this.heuristics.reduce((acc, curr) => Math.min(acc, curr)) + this.cost;
+      this.heuristics.reduce(
+        (acc, curr) => Math.min(acc, curr),
+        this.heuristics[0]
+      ) + this.cost;
     this.cost = cost;
   }
   isGoal() {

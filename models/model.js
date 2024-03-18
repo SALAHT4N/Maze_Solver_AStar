@@ -28,96 +28,101 @@ export const solve = function (callback) {
     throw new Error("Please select a goal to start solving");
   }
 
+  const expandChild = (childX, childY, parent) => {
+    const child = new Node(childX, childY, parent.cost + 1, parent);
+
+    const storedChildOpen = closedList.find((node) => node.id == child.id);
+    const storedChildClosed = openList
+      .toArray()
+      .find((node) => node.id == child.id);
+
+    if (
+      (storedChildClosed || storedChildOpen) &&
+      (child.fValue < storedChildClosed?.fValue ||
+        child.fValue < storedChildOpen?.fValue)
+    ) {
+      if (storedChildOpen) {
+        openList.remove((c) => c.id == storedChildOpen.id);
+        openList.enqueue(child);
+      } else {
+        const nodeIndex = closedList.findIndex(
+          (c) => c.id == storedChildClosed.id
+        );
+        closedList.splice(nodeIndex, 1);
+        openList.enqueue(child);
+      }
+    } else {
+      openList.enqueue(child);
+    }
+  };
+
   const openList = new MinPriorityQueue((n) => n.fValue);
   const closedList = [];
 
   openList.enqueue(
     new Node(state.startNode.x, state.startNode.y, 0, null, state.endNodes)
   );
-  const expandChild = (childX, childY, parent) => {
-    const rightChild = new Node(childX, childY, parent.cost + 1, parent);
 
-    const storedRightChildOpen = closedList.find(
-      (node) => node.id == rightChild.id
-    );
-    const storedRightChildClosed = openList
-      .toArray()
-      .find((node) => node.id == rightChild.id);
-
-    if (
-      (storedRightChildClosed || storedRightChildOpen) &&
-      (rightChild.fValue < storedRightChildClosed?.fValue ||
-        rightChild.fValue < storedRightChildOpen?.fValue)
-    ) {
-      if (storedRightChildOpen) {
-        openList.remove((c) => c.id == storedRightChildOpen.id);
-        openList.enqueue(rightChild);
-      } else {
-        const nodeIndex = closedList.findIndex(
-          (c) => c.id == storedRightChildClosed.id
-        );
-        closedList.splice(nodeIndex, 1);
-        openList.enqueue(rightChild);
-      }
-    } else {
-      openList.enqueue(rightChild);
-    }
-  };
   console.log("----------------------------------------");
   console.log(state.maze);
   console.log("----------------------------------------");
 
   const intId = setInterval(() => {
     const n = openList.dequeue();
-
+    console.log(n);
+    console.log(openList);
     if (n.isGoal()) {
       state.maze[n.y][n.x] = appConstants.blockTypes["start"];
       callback();
       clearInterval(intId);
       return;
     }
+
+    const isNotBlock = (x, y) =>
+      state.maze[y][x] != appConstants.blockTypes.block;
+
     const up = {
       x: n.x,
       y: n.y - 1,
+      isValid() {
+        return this.y >= 0 && isNotBlock(this.x, this.y);
+      },
     };
+
     const right = {
       x: n.x + 1,
       y: n.y,
+      isValid() {
+        return this.x < state.width && isNotBlock(this.x, this.y);
+      },
     };
+
     const left = {
       x: n.x - 1,
       y: n.y,
+      isValid() {
+        return this.x >= 0 && isNotBlock(this.x, this.y);
+      },
     };
+
     const down = {
       x: n.x,
       y: n.y + 1,
+      isValid() {
+        return this.y < state.height && isNotBlock(this.x, this.y);
+      },
     };
 
-    if (up.y >= 0 && state.maze[up.y][up.x] != appConstants.blockTypes.block) {
-      expandChild(up.x, up.y, n);
-    }
-    if (
-      left.x >= 0 &&
-      state.maze[left.y][left.x] != appConstants.blockTypes.block
-    ) {
-      expandChild(left.x, left.y, n);
-    }
-    console.log(state.maze[down.y][down.x] != appConstants.blockTypes.block);
-    if (
-      down.y < state.height &&
-      state.maze[down.y][down.x] != appConstants.blockTypes.block
-    ) {
-      expandChild(n.x, n.y + 1, n);
-    }
-    if (
-      right.x < state.width &&
-      state.maze[right.y][right.x] != appConstants.blockTypes.block
-    ) {
-      expandChild(right.x, right.y, n);
-    }
+    [up, left, right, down].forEach((child) => {
+      const value = child.isValid();
+      console.log(value);
+      child.isValid() && expandChild(child.x, child.y, n);
+    });
+
     console.log(openList);
+
     closedList.push(n);
     state.maze[n.y][n.x] = appConstants.blockTypes.test;
-    callback();
-  }, 10000);
+    callback({ x: n.x, y: n.y }, "test");
+  }, 5000);
 };

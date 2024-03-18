@@ -8,6 +8,8 @@ import {
   setDimensions,
   setMaze,
   changeCellState,
+  removeStartNode,
+  removeEndNode,
 } from "./models/state.js";
 import { stateColors, stateGlows } from "./config.js";
 
@@ -30,9 +32,7 @@ const startAlgorithm = function () {
 
   setMaze(stateMatrix);
 
-  model.solve(() => {
-    console.log(state.maze);
-  });
+  model.solve(updateCell);
 };
 
 const registerDimensions = function (dimensions) {
@@ -41,13 +41,30 @@ const registerDimensions = function (dimensions) {
   mazeView.createMaze(state.width, state.height);
 };
 
-const changeCellState = function ({ x, y }) {
+const updateCell = function ({ x, y }, type) {
   try {
-    const currentBlockType = state.selectedBlockType;
+    const selectedBlockType = type ?? state.selectedBlockType;
+    const currentCellType = mazeView.getCellType(x, y);
 
-    changeCellState(x, y, currentBlockType);
+    if (selectedBlockType === currentCellType) {
+      // toggle
+      mazeView.updateCellColor({ x, y }, "empty");
 
-    mazeView.updateCellColor({ x, y }, currentBlockType);
+      // if start then remove startNode from staste
+      selectedBlockType === "start" && removeStartNode();
+
+      // if goal then pop from endNodes from state
+      selectedBlockType === "goal" && removeEndNode(x, y);
+    } else {
+      if (selectedBlockType === "start") {
+        console.log("selectedBlockType: ", selectedBlockType);
+        mazeView.clearCellsOfType(selectedBlockType);
+      }
+
+      changeCellState(x, y, selectedBlockType);
+
+      mazeView.updateCellColor({ x, y }, selectedBlockType);
+    }
   } catch (error) {
     alert(error.message);
   }
@@ -58,7 +75,7 @@ const blockClicked = function (blockType) {
 };
 
 const init = function () {
-  mazeView.addHandlerChangeState(changeCellState);
+  mazeView.addHandlerChangeState(updateCell);
   menu.addHandlerStartButton(startAlgorithm);
   menu.addHandlerReadDimensions(registerDimensions);
   menu.addOnClickHandlerBlocks(blockClicked);

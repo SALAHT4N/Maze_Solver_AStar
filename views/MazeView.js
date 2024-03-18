@@ -50,6 +50,21 @@ export class MazeView {
     console.log(this._matrix);
   }
 
+  clearCellsOfType(type) {
+    console.log(this._matrix);
+    const cellsOfType = this._matrix
+      .flat()
+      .filter((cell) => cell._state === type);
+    console.log(cellsOfType);
+    cellsOfType.forEach((cell) => {
+      this.updateCellColor({ x: cell.x, y: cell.y }, "empty");
+    });
+  }
+
+  getCellType(x, y) {
+    return this._matrix[y][x]._state;
+  }
+
   addHandlerChangeState(handler) {
     this._element.addEventListener("click", (e) => {
       const cell = e.target.closest(".card-body");
@@ -76,6 +91,8 @@ export class MazeView {
     const id = formatId(coordinates);
     const cell = this._element.querySelector(`#${id}`);
 
+    this._matrix[coordinates.y][coordinates.x]._state = state;
+    console.log(this._matrix[coordinates.y][coordinates.x]);
     cell.className = "";
     cell.classList.add("card-body");
     cell.classList.add("transition-all");
@@ -84,8 +101,10 @@ export class MazeView {
     cell.classList.add("shadow-md");
     cell.classList.add("rounded-md");
 
-    cell.classList.add(this._stateColors[state]);
-    cell.classList.add(this._stateGlows[state]);
+    const color = this._stateColors[state];
+    const glow = this._stateGlows[state];
+    color && cell.classList.toggle(color);
+    glow && cell.classList.toggle(glow);
   }
 
   _clear() {
