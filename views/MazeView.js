@@ -1,5 +1,6 @@
 import { CellView } from "./CellView.js";
 import * as colors from "../config.js";
+import { formatId } from "./utilities.js";
 
 export class MazeView {
   _element = document.querySelector("#maze-container");
@@ -8,10 +9,13 @@ export class MazeView {
   _stateColors;
   _stateGlows;
   _width;
-  createMaze(width, height, stateColors, stateGlows) {
+
+  constructor(stateColors, stateGlows) {
     this._stateColors = stateColors;
     this._stateGlows = stateGlows;
+  }
 
+  createMaze(width, height) {
     this._clear();
     this._element.className = "";
     this._element.classList.add("grid");
@@ -22,9 +26,16 @@ export class MazeView {
 
     const countOfCells = width * height;
     let tempCellArray = [];
-    console.log(countOfCells);
+
+    const getDimensionsFromIndex = (index) => {
+      return {
+        x: index % width,
+        y: Math.floor(index / width),
+      };
+    };
+
     for (let i = 0; i < countOfCells; i++) {
-      const { x, y } = this._getDimensionsFromIndex(i);
+      const { x, y } = getDimensionsFromIndex(i);
 
       const cell = new CellView(x, y, colors.stateColors, colors.stateGlows);
 
@@ -41,22 +52,28 @@ export class MazeView {
 
   addHandlerChangeState(handler) {
     this._element.addEventListener("click", (e) => {
-      const cell = e.target.closest(".card.body");
+      const cell = e.target.closest(".card-body");
+
+      console.log("[before identifying cell] inside click handler");
+      console.log(e.target);
 
       if (!cell) return;
-      // know the coordintaes of this cell by counting how many cells are before it
-      const cellIndex = getCellCoordinates(cell);
 
-      handler(this._getDimensionsFromIndex(cellIndex));
+      console.log("[after identifying cell] inside click handler");
+
+      const coordinates = getCellCoordinates(cell);
+
+      handler(coordinates);
     });
 
-    const getCellCoordinates = (cell) =>
-      Array.from(this._element.querySelectorAll(".card.body")).findIndex((el) =>
-        el.isEqualNode(cell)
-      );
+    const getCellCoordinates = (cell) => {
+      const [_, x, y] = cell.id.split("_");
+      return { x: Number(x), y: Number(y) };
+    };
   }
 
-  updateCellState(id, state) {
+  updateCellColor(coordinates, state) {
+    const id = formatId(coordinates);
     const cell = this._element.querySelector(`#${id}`);
 
     cell.className = "";
@@ -77,13 +94,6 @@ export class MazeView {
 
   _addCell(cell) {
     this._element.insertAdjacentHTML("beforeend", cell.generateMarkup());
-  }
-
-  _getDimensionsFromIndex(index) {
-    return {
-      x: index % this._width,
-      y: Math.floor(index / this._width),
-    };
   }
 
   getMazeStateMatrix() {

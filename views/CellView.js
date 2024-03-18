@@ -1,3 +1,5 @@
+import { formatId } from "./utilities.js";
+
 export class CellView {
   _state;
   x;
@@ -16,10 +18,13 @@ export class CellView {
   }
 
   generateMarkup() {
+    const id = formatId({
+      x: this.x,
+      y: this.y,
+    });
+
     return `
-      <div id="${this.x}_${
-      this.y
-    }"class="card-body transition-all hover:-translate-y-1 duration-150 
+      <div id="${id}"class="card-body transition-all hover:-translate-y-1 duration-150 
       ${this._stateColors[this._state]} ${
       this._stateGlows[this._state] ?? ""
     } shadow-md rounded-md"></div> `;

@@ -121,18 +121,3 @@ export const solve = function (callback) {
     callback();
   }, 10000);
 };
-
-const getHeuristic = function (startPos, endPos) {
-  return heuristicFunctions[state.heuristicFunction](startPos, endPos);
-};
-
-const heuristicFunctions = {
-  manhattan: (startPos, endPos) =>
-    Math.abs(startPos.y - endPos.y) + Math.abs(startPos.x - endPos.x),
-  ecludian: (startPos, endPos) => 0,
-};
-
-export const setDimensions = function (dimensions) {
-  state.height = dimensions.height ?? state.height;
-  state.width = dimensions.width ?? state.width;
-};

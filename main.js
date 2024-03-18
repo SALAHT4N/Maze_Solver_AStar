@@ -3,7 +3,19 @@ import * as menu from "./views/MenuView.js";
 import * as model from "./models/model.js";
 import { MazeView } from "./views/MazeView.js";
 import appConstants from "./appConstants.js";
-import { state } from "./models/state.js";
+import {
+  state,
+  setDimensions,
+  setMaze,
+  changeCellState,
+} from "./models/state.js";
+import { stateColors, stateGlows } from "./config.js";
+
+const constructModelMaze = function (cellMatrixView) {
+  return cellMatrixView.map((row) =>
+    row.map((cell) => appConstants.blockTypes[cell._state])
+  );
+};
 
 const startAlgorithm = function () {
   const data = menu.getAllInputData();
@@ -12,58 +24,40 @@ const startAlgorithm = function () {
   state.heuristicFunction = data.heuristicFunction;
   state.speed = data.speed;
 
-  //check if there's no maze
+  const cellViewsMatrix = mazeView.getMazeStateMatrix();
 
-  const cellViewsMatrix = maze.getMazeStateMatrix();
-  cellViewsMatrix[0][0]._state = "start";
-  cellViewsMatrix[1][0]._state = "block";
-  cellViewsMatrix[1][1]._state = "block";
-  cellViewsMatrix[3][3]._state = "goal";
+  const stateMatrix = constructModelMaze(cellViewsMatrix);
 
-  const stateMatrix = cellViewsMatrix.map((row) =>
-    row.map((cell) => appConstants.blockTypes[cell._state])
-  );
-  console.log("State matrix (controller): ");
-  console.log(stateMatrix);
-  state.maze = stateMatrix;
-  state.endNodes = [
-    {
-      x: 3,
-      y: 3,
-    },
-  ];
-  state.startNode = {
-    x: 0,
-    y: 0,
-    cost: 0,
-  };
-  state.heuristicFunction = "manhattan";
+  setMaze(stateMatrix);
+
   model.solve(() => {
-    console.log(model.state.maze);
+    console.log(state.maze);
   });
 };
 
 const registerDimensions = function (dimensions) {
-  model.setDimensions(dimensions);
+  setDimensions(dimensions);
 
-  maze.createMaze(state.width, state.height);
+  mazeView.createMaze(state.width, state.height);
 };
 
-const updateMaze = function (x, y) {
-  // know the currently selected block type
-  const currentBlockType = state.selectedBlockType;
+const changeCellState = function ({ x, y }) {
+  try {
+    const currentBlockType = state.selectedBlockType;
 
-  // update maze state
-  state.maze[y][x] = appConstants.blockTypes[currentBlockType];
+    changeCellState(x, y, currentBlockType);
 
-  // add the corresponding color
-  maze.updateCellState(`${x}_${y}`, currentBlockType);
+    mazeView.updateCellColor({ x, y }, currentBlockType);
+  } catch (error) {
+    alert(error.message);
+  }
 };
 
 const init = function () {
-  maze.addHandlerChangeState(updateMaze);
+  mazeView.addHandlerChangeState(changeCellState);
   menu.addHandlerStartButton(startAlgorithm);
   menu.addHandlerReadDimensions(registerDimensions);
 };
-let maze = new MazeView();
+
+let mazeView = new MazeView(stateColors, stateGlows);
 init();
