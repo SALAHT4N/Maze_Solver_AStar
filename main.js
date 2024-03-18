@@ -53,10 +53,15 @@ const changeCellState = function ({ x, y }) {
   }
 };
 
+const blockClicked = function (blockType) {
+  state.selectedBlockType = blockType;
+};
+
 const init = function () {
   mazeView.addHandlerChangeState(changeCellState);
   menu.addHandlerStartButton(startAlgorithm);
   menu.addHandlerReadDimensions(registerDimensions);
+  menu.addOnClickHandlerBlocks(blockClicked);
 };
 
 let mazeView = new MazeView(stateColors, stateGlows);
