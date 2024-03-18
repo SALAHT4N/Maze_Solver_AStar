@@ -1,5 +1,6 @@
 export const stateColors = {
   start: "bg-green-600",
+  solution: "bg-green-600",
   block: "bg-base-light",
   empty: "bg-base-100",
   goal: "bg-red-700",
@@ -8,6 +9,7 @@ export const stateColors = {
 
 export const stateGlows = {
   start: "shadow-green-600",
+  solution: "shadow-green-600",
   goal: "shadow-red-600/50",
   block: undefined,
   empty: undefined,

@@ -7,6 +7,7 @@ export const state = {
   maze: [],
   startNode: null,
   endNodes: [],
+  isPlaying: false,
 };
 
 export const setDimensions = function (dimensions) {

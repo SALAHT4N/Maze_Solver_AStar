@@ -17,12 +17,12 @@ export class Node {
       getHeuristic({ x: this.x, y: this.y }, endNode)
     );
     this.parent = parent;
+    this.cost = cost;
     this.fValue =
       this.heuristics.reduce(
         (acc, curr) => Math.min(acc, curr),
         this.heuristics[0]
       ) + this.cost;
-    this.cost = cost;
   }
   isGoal() {
     return this.heuristics.some((v) => v == 0);

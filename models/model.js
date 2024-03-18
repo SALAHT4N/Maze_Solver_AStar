@@ -36,22 +36,34 @@ export const solve = function (callback) {
       .toArray()
       .find((node) => node.id == child.id);
 
+    console.log("Closed searched :");
+    console.log(storedChildClosed);
+    console.log("💥💥💥💥💥💥💥💥");
+    console.log("Open searched :");
+    console.log(storedChildOpen);
+
     if (
       (storedChildClosed || storedChildOpen) &&
       (child.fValue < storedChildClosed?.fValue ||
         child.fValue < storedChildOpen?.fValue)
     ) {
       if (storedChildOpen) {
+        console.log("Already stored in the open list 💥💥💥");
+        console.log(storedChildOpen);
         openList.remove((c) => c.id == storedChildOpen.id);
         openList.enqueue(child);
       } else {
         const nodeIndex = closedList.findIndex(
           (c) => c.id == storedChildClosed.id
         );
+
         closedList.splice(nodeIndex, 1);
+        console.log("Deleted from the closed list ❌❌❌❌");
+        console.log(storedChildClosed);
+        callback({ x: storedChildClosed.x, y: storedChildClosed.y }, "empty");
         openList.enqueue(child);
       }
-    } else {
+    } else if (!(storedChildClosed || storedChildOpen)) {
       openList.enqueue(child);
     }
   };
@@ -63,17 +75,25 @@ export const solve = function (callback) {
     new Node(state.startNode.x, state.startNode.y, 0, null, state.endNodes)
   );
 
-  console.log("----------------------------------------");
-  console.log(state.maze);
-  console.log("----------------------------------------");
-
   const intId = setInterval(() => {
     const n = openList.dequeue();
     console.log(n);
     console.log(openList);
     if (n.isGoal()) {
       state.maze[n.y][n.x] = appConstants.blockTypes["start"];
-      callback();
+      callback({ x: n.x, y: n.y }, "test");
+      console.log("Here is the goal 💥💥💥");
+      console.log(n);
+      let parent = n;
+      const intSolutionPathId = setInterval(() => {
+        if (parent === null) {
+          clearInterval(intSolutionPathId);
+          state.isPlaying = false;
+          return;
+        }
+        callback({ x: parent.x, y: parent.y }, "solution");
+        parent = parent.parent;
+      }, 100);
       clearInterval(intId);
       return;
     }
@@ -118,11 +138,9 @@ export const solve = function (callback) {
       console.log(value);
       child.isValid() && expandChild(child.x, child.y, n);
     });
-
-    console.log(openList);
-
+    console.log(n.fValue);
     closedList.push(n);
     state.maze[n.y][n.x] = appConstants.blockTypes.test;
     callback({ x: n.x, y: n.y }, "test");
-  }, 5000);
+  }, 500);
 };

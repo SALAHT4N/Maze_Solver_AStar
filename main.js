@@ -20,6 +20,7 @@ const constructModelMaze = function (cellMatrixView) {
 };
 
 const startAlgorithm = function () {
+  state.isPlaying = true;
   const data = menu.getAllInputData();
   state.width = data.width;
   state.height = data.height;
@@ -46,7 +47,7 @@ const updateCell = function ({ x, y }, type) {
     const selectedBlockType = type ?? state.selectedBlockType;
     const currentCellType = mazeView.getCellType(x, y);
 
-    if (selectedBlockType === currentCellType) {
+    if (!type && selectedBlockType === currentCellType) {
       // toggle
       mazeView.updateCellColor({ x, y }, "empty");
 
@@ -82,4 +83,13 @@ const init = function () {
 };
 
 let mazeView = new MazeView(stateColors, stateGlows);
+mazeView._element.addEventListener(
+  "click",
+  (e) => {
+    if (state.isPlaying) {
+      e.stopPropagation();
+    }
+  },
+  true
+);
 init();
