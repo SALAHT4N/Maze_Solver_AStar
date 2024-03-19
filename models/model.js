@@ -6,8 +6,9 @@ import {
   IGetCompareValue,
 } from "@datastructures-js/priority-queue";
 import appConstants from "../appConstants.js";
-import { state } from "./state.js";
+import { clearEndNodes, state } from "./state.js";
 import { Node } from "./Node.js";
+import { hideResumePauseBtn } from "../views/MenuView.js";
 
 /*
  *0 -> Empty
@@ -76,10 +77,20 @@ export const solve = function (callback) {
   );
 
   const intId = setInterval(() => {
+    if (state.isPaused) return;
+
     const n = openList.dequeue();
-    console.log(n);
-    console.log(openList);
+
+    if (n === null) {
+      clearEndNodes();
+      hideResumePauseBtn();
+      clearInterval(intId);
+    }
+
     if (n.isGoal()) {
+      clearEndNodes();
+      hideResumePauseBtn();
+      clearInterval(intId);
       state.maze[n.y][n.x] = appConstants.blockTypes["start"];
       callback({ x: n.x, y: n.y }, "test");
       console.log("Here is the goal 💥💥💥");
@@ -94,7 +105,6 @@ export const solve = function (callback) {
         callback({ x: parent.x, y: parent.y }, "solution");
         parent = parent.parent;
       }, 100);
-      clearInterval(intId);
       return;
     }
 
@@ -142,5 +152,7 @@ export const solve = function (callback) {
     closedList.push(n);
     state.maze[n.y][n.x] = appConstants.blockTypes.test;
     callback({ x: n.x, y: n.y }, "test");
-  }, 500);
+  }, 500 - state.speed * 115);
+
+  state.gameLoopId = intId;
 };

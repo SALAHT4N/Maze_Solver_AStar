@@ -10,6 +10,7 @@ import {
   changeCellState,
   removeStartNode,
   removeEndNode,
+  clearEndNodes,
 } from "./models/state.js";
 import { stateColors, stateGlows } from "./config.js";
 
@@ -20,23 +21,25 @@ const constructModelMaze = function (cellMatrixView) {
 };
 
 const startAlgorithm = function () {
-  state.isPlaying = true;
-  const data = menu.getAllInputData();
-  state.width = data.width;
-  state.height = data.height;
-  state.heuristicFunction = data.heuristicFunction;
-  state.speed = data.speed;
-
-  const cellViewsMatrix = mazeView.getMazeStateMatrix();
-
-  const stateMatrix = constructModelMaze(cellViewsMatrix);
-
-  setMaze(stateMatrix);
-
   try {
+    state.isPlaying = true;
+    menu.toggleBottomMenuButtons();
+    const data = menu.getAllInputData();
+    state.width = data.width;
+    state.height = data.height;
+    state.heuristicFunction = data.heuristicFunction;
+    state.speed = data.speed;
+    const cellViewsMatrix = mazeView.getMazeStateMatrix();
+
+    const stateMatrix = constructModelMaze(cellViewsMatrix);
+
+    setMaze(stateMatrix);
+
     model.solve(updateCell);
-  } catch (error) {
-    alert(error);
+  } catch (e) {
+    menu.toggleBottomMenuButtons();
+    state.isPlaying = false;
+    alert(e.message);
   }
 };
 
@@ -81,11 +84,26 @@ const blockClicked = function (blockType) {
   state.selectedBlockType = blockType;
 };
 
+const resumePauseClicked = function () {
+  state.isPaused = !state.isPaused;
+  menu.setResumePauseBtnName(state.isPaused ? "Resume" : "Pause");
+};
+
+const clearButtonClicked = function () {
+  state.isPaused = false;
+  state.isPlaying = false;
+  clearInterval(state.gameLoopId);
+  clearEndNodes();
+  mazeView.clearMaze();
+};
+
 const init = function () {
   mazeView.addHandlerChangeState(updateCell);
   menu.addHandlerStartButton(startAlgorithm);
   menu.addHandlerReadDimensions(registerDimensions);
   menu.addOnClickHandlerBlocks(blockClicked);
+  menu.addOnClickResumePauseBtn(resumePauseClicked);
+  menu.addOnClickClearBtn(clearButtonClicked);
 };
 
 let mazeView = new MazeView(stateColors, stateGlows);
