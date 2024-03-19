@@ -106,7 +106,13 @@ export class MazeView {
     color && cell.classList.toggle(color);
     glow && cell.classList.toggle(glow);
   }
-
+  clearMaze() {
+    for (let i = 0; i < this._matrix.length; i++) {
+      for (let j = 0; j < this._matrix[0].length; j++) {
+        this.updateCellColor({ x: j, y: i }, "empty");
+      }
+    }
+  }
   _clear() {
     this._element.innerHTML = "";
   }

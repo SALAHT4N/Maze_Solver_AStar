@@ -8,6 +8,8 @@ export const state = {
   startNode: null,
   endNodes: [],
   isPlaying: false,
+  isPaused: false,
+  gameLoopId: undefined,
 };
 
 export const setDimensions = function (dimensions) {
@@ -25,7 +27,7 @@ export const removeStartNode = function () {
 
 export const removeEndNode = function (x, y) {
   state.endNodes = state.endNodes.filter(
-    (endNode) => endNode.x === x && endNode.y === y
+    (endNode) => endNode.x !== x && endNode.y !== y
   );
 };
 
@@ -39,4 +41,8 @@ export const changeCellState = function (x, y, blockType) {
 
     state.endNodes.push({ x, y, cost: 1 });
   }
+};
+
+export const clearEndNodes = function () {
+  state.endNodes.length = 0;
 };

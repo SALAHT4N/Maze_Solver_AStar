@@ -8,6 +8,9 @@ const heuristicFunctionsRadioButtons = [
 const speedRangeInput = document.querySelector("#speed-range-input");
 const startBtn = document.querySelector("#start-button");
 const blocksOpt = document.querySelectorAll(".blocks");
+const pauseResumeBtn = document.querySelector("#pauseresume-button");
+const clearBtn = document.querySelector("#clear-button");
+const mazeControlButtons = document.querySelector("#control-btns");
 
 export const getAllInputData = () => {
   return {
@@ -16,6 +19,11 @@ export const getAllInputData = () => {
     heuristicFunction: getHeuristicInputValue(),
     speed: getSpeedRangeInputValue(),
   };
+};
+
+export const toggleBottomMenuButtons = function () {
+  startBtn.classList.toggle("hidden");
+  mazeControlButtons.classList.toggle("hidden");
 };
 
 export const addHandlerStartButton = function (handler) {
@@ -50,6 +58,28 @@ export const addOnClickHandlerBlocks = (handler) => {
       handler(ele.id.split("_")[0]);
     });
   });
+};
+
+export const addOnClickClearBtn = (handler) => {
+  clearBtn.addEventListener("click", () => {
+    toggleBottomMenuButtons();
+    pauseResumeBtn.classList.remove("hidden");
+    handler();
+  });
+};
+
+export const addOnClickResumePauseBtn = (handler) => {
+  pauseResumeBtn.addEventListener("click", () => {
+    handler();
+  });
+};
+
+export const setResumePauseBtnName = function (str) {
+  pauseResumeBtn.textContent = str;
+};
+
+export const hideResumePauseBtn = function () {
+  pauseResumeBtn.classList.add("hidden");
 };
 
 const getWidthInputValue = () => {
