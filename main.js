@@ -11,6 +11,7 @@ import {
   removeStartNode,
   removeEndNode,
   clearEndNodes,
+  clearStartNode,
 } from "./models/state.js";
 import { stateColors, stateGlows } from "./config.js";
 
@@ -94,6 +95,7 @@ const clearButtonClicked = function () {
   state.isPlaying = false;
   clearInterval(state.gameLoopId);
   clearEndNodes();
+  clearStartNode();
   mazeView.clearMaze();
 };
 

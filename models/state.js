@@ -46,3 +46,7 @@ export const changeCellState = function (x, y, blockType) {
 export const clearEndNodes = function () {
   state.endNodes.length = 0;
 };
+
+export const clearStartNode = function () {
+  state.startNode = null;
+};
