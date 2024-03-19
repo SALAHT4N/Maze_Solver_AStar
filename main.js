@@ -33,7 +33,11 @@ const startAlgorithm = function () {
 
   setMaze(stateMatrix);
 
-  model.solve(updateCell);
+  try {
+    model.solve(updateCell);
+  } catch (error) {
+    alert(error);
+  }
 };
 
 const registerDimensions = function (dimensions) {
@@ -55,6 +59,8 @@ const updateCell = function ({ x, y }, type) {
       selectedBlockType === "start" && removeStartNode();
 
       // if goal then pop from endNodes from state
+      console.log("🔥" + selectedBlockType);
+      console.log(x, y);
       selectedBlockType === "goal" && removeEndNode(x, y);
     } else {
       if (selectedBlockType === "start") {

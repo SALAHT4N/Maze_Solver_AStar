@@ -39,6 +39,6 @@ const heuristicFunctions = {
 
   ecludian: (startPos, endPos) =>
     Math.sqrt(
-      Math.pow(endPos.x - startPos.x) + Math.pow(endPos.y - startPos.y)
+      Math.pow(endPos.x - startPos.x, 2) + Math.pow(endPos.y - startPos.y, 2)
     ),
 };

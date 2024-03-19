@@ -25,7 +25,7 @@ export const removeStartNode = function () {
 
 export const removeEndNode = function (x, y) {
   state.endNodes = state.endNodes.filter(
-    (endNode) => endNode.x === x && endNode.y === y
+    (endNode) => endNode.x !== x && endNode.y !== y
   );
 };
 
