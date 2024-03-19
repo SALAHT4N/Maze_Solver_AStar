@@ -1,22 +1,8 @@
-import {
-  PriorityQueue,
-  MinPriorityQueue,
-  MaxPriorityQueue,
-  ICompare,
-  IGetCompareValue,
-} from "@datastructures-js/priority-queue";
+import { MinPriorityQueue } from "@datastructures-js/priority-queue";
 import appConstants from "../appConstants.js";
 import { clearEndNodes, state } from "./state.js";
 import { Node } from "./Node.js";
 import { hideResumePauseBtn } from "../views/MenuView.js";
-
-/*
- *0 -> Empty
- *1 -> Wall
- *2 -> Start
- *3 -> test
- *4 -> Goal
- */
 
 export const solve = function (callback) {
   if (!state.startNode) {
@@ -37,20 +23,13 @@ export const solve = function (callback) {
       .toArray()
       .find((node) => node.id == child.id);
 
-    console.log("Closed searched :");
-    console.log(storedChildClosed);
-    console.log("💥💥💥💥💥💥💥💥");
-    console.log("Open searched :");
-    console.log(storedChildOpen);
+    const visited = storedChildClosed || storedChildOpen;
+    const currentValueIsLower =
+      child.fValue < storedChildClosed?.fValue ||
+      child.fValue < storedChildOpen?.fValue;
 
-    if (
-      (storedChildClosed || storedChildOpen) &&
-      (child.fValue < storedChildClosed?.fValue ||
-        child.fValue < storedChildOpen?.fValue)
-    ) {
+    if (visited && currentValueIsLower) {
       if (storedChildOpen) {
-        console.log("Already stored in the open list 💥💥💥");
-        console.log(storedChildOpen);
         openList.remove((c) => c.id == storedChildOpen.id);
         openList.enqueue(child);
       } else {
@@ -59,10 +38,9 @@ export const solve = function (callback) {
         );
 
         closedList.splice(nodeIndex, 1);
-        console.log("Deleted from the closed list ❌❌❌❌");
-        console.log(storedChildClosed);
-        callback({ x: storedChildClosed.x, y: storedChildClosed.y }, "empty");
         openList.enqueue(child);
+
+        callback({ x: storedChildClosed.x, y: storedChildClosed.y }, "empty");
       }
     } else if (!(storedChildClosed || storedChildOpen)) {
       openList.enqueue(child);
@@ -90,21 +68,25 @@ export const solve = function (callback) {
     if (n.isGoal()) {
       clearEndNodes();
       hideResumePauseBtn();
+
       clearInterval(intId);
       state.maze[n.y][n.x] = appConstants.blockTypes["start"];
-      callback({ x: n.x, y: n.y }, "test");
-      console.log("Here is the goal 💥💥💥");
-      console.log(n);
+
       let parent = n;
-      const intSolutionPathId = setInterval(() => {
+
+      const colorSolutionPath = () => {
         if (parent === null) {
           clearInterval(intSolutionPathId);
           state.isPlaying = false;
           return;
         }
         callback({ x: parent.x, y: parent.y }, "solution");
+
         parent = parent.parent;
-      }, 100);
+      };
+
+      const intSolutionPathId = setInterval(colorSolutionPath, 100);
+
       return;
     }
 
@@ -143,14 +125,16 @@ export const solve = function (callback) {
       },
     };
 
-    [up, left, right, down].forEach((child) => {
-      const value = child.isValid();
-      console.log(value);
-      child.isValid() && expandChild(child.x, child.y, n);
-    });
-    console.log(n.fValue);
+    // expand the 4 directions
+    [up, left, right, down].forEach(
+      (child) => child.isValid() && expandChild(child.x, child.y, n)
+    );
+
+    // Finish testing current node
     closedList.push(n);
+
     state.maze[n.y][n.x] = appConstants.blockTypes.test;
+
     callback({ x: n.x, y: n.y }, "test");
   }, 500 - state.speed * 115);
 
